@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -22,6 +23,10 @@ namespace ProyectoWebFacturacionAPI.Models
         public required string Username { get; set; }
         [Required]
         public required string Password { get; set; }
+        [Required]
+        [DefaultValue(0)]
+        public int NumeroIntentos { get; set; }
+        public DateTime? FechaBloqueoLogin { get; set; }
         [Required]
         public required bool Activo { get; set; }
         [Required]
