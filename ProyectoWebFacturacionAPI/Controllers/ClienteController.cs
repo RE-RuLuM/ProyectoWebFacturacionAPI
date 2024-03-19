@@ -38,16 +38,16 @@ namespace ProyectoWebFacturacionAPI.Controllers
         {
             var result = await _clienteService.AgregarCliente(cliente);
 
-            return Ok(result);
+            return Created();
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> CrearCliente(int id, ClienteDTO cliente)
+        public async Task<ActionResult> ActualizarCliente(int id, ClienteDTO cliente)
         {
             cliente.Id = id;
             var result = await _clienteService.ActualizarCliente(cliente);
 
-            return Ok(result);
+            return Created();
         }
 
         [HttpDelete("{id}")]

@@ -46,7 +46,7 @@ namespace ProyectoWebFacturacionAPI.ServicesImpl
 
         public async Task<int> EliminarCliente(int id)
         {
-            var cliente = await _context.Clientes.SingleAsync(c => c.Id == id);
+            var cliente = await ObtenerClientePorId(id);
 
             cliente.Activo = false;
             cliente.FechaEliminacion = DateTime.Now;

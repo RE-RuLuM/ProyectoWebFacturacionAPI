@@ -7,8 +7,8 @@ namespace ProyectoWebFacturacionAPI.Services
     {
         public Task<List<Cliente>> ObtenerClientes();
         public Task<Cliente> ObtenerClientePorId(int id);
-        public Task<int> AgregarCliente(ClienteDTO cliente);
-        public Task<int> ActualizarCliente(ClienteDTO cliente);
+        public Task<int> AgregarCliente(ClienteDTO clienteDTO);
+        public Task<int> ActualizarCliente(ClienteDTO clienteDTO);
         public Task<int> EliminarCliente(int id);
     }
 }

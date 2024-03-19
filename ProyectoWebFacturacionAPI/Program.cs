@@ -48,6 +48,7 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 
 builder.Services.AddScoped<IUsuarioService, UsuarioServiceImpl>();
 builder.Services.AddScoped<IClienteService, ClienteServiceImpl>();
+builder.Services.AddScoped<IProductoService, ProductoServiceImpl>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
