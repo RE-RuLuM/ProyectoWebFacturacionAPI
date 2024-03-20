@@ -8,13 +8,21 @@ namespace ProyectoWebFacturacionAPI.Models
         [Key]
         [Column("FacturaId")]
         public int Id { get; set; }
-        [Required]
         [MaxLength(11)]
-        public required string NumeroFactura { get; set; }
+        public string? NumeroFactura { get; set; }
         [Required]
         public int ClienteId { get; set; }
+        [Required]
+        public bool Activo { get; set; }
+        [Required]
+        public DateTime FechaCreacion { get; set; }
+        [Required]
+        public required string UsuarioCreacion { get; set; }
+        public DateTime? FechaEliminacion { get; set; }
 
-        public required Cliente Cliente { get; set; }
+        public Cliente Cliente { get; set; } = null!;
+
+        public ICollection<DetalleFactura> Detalles { get; set; } = new List<DetalleFactura>();
 
     }
 }

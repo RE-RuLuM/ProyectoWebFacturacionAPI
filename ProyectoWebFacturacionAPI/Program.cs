@@ -6,12 +6,14 @@ using ProyectoWebFacturacionAPI.Data;
 using ProyectoWebFacturacionAPI.Services;
 using ProyectoWebFacturacionAPI.ServicesImpl;
 using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -49,6 +51,7 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 builder.Services.AddScoped<IUsuarioService, UsuarioServiceImpl>();
 builder.Services.AddScoped<IClienteService, ClienteServiceImpl>();
 builder.Services.AddScoped<IProductoService, ProductoServiceImpl>();
+builder.Services.AddScoped<IFacturaService, FacturaServiceImpl>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

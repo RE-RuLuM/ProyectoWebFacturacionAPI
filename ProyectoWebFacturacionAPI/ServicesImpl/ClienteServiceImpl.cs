@@ -56,6 +56,6 @@ namespace ProyectoWebFacturacionAPI.ServicesImpl
 
         public Task<Cliente> ObtenerClientePorId(int id) => _context.Clientes.SingleAsync(c => c.Id == id);
 
-        public Task<List<Cliente>> ObtenerClientes() => _context.Clientes.Where(c => c.Activo).ToListAsync();
+        public async Task<ICollection<Cliente>> ObtenerClientes() => await _context.Clientes.Where(c => c.Activo).ToListAsync();
     }
 }

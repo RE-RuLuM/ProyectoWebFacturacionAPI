@@ -17,12 +17,12 @@ namespace ProyectoWebFacturacionAPI.Models
         public required string NombreProducto { get; set; }
         [Required]
         [Column(TypeName = "money")]
-        public double Precio { get; set; }
+        public required double Precio { get; set; }
         [Required]
         public required int Cantidad { get; set; }
         [Required]
         public required double SubTotal { get; set; }
 
-        public required CabFactura CabFactura { get; set; }
+        public CabFactura CabFactura { get; set; } = null!;
     }
 }

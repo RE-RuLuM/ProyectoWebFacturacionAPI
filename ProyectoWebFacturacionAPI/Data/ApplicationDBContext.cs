@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProyectoWebFacturacionAPI.Models;
+using System.Reflection.Metadata;
 
 namespace ProyectoWebFacturacionAPI.Data
 {
@@ -12,6 +13,15 @@ namespace ProyectoWebFacturacionAPI.Data
         public DbSet <DetalleFactura> DetalleFacturas { get; set; }
         public ApplicationDBContext(DbContextOptions options) : base(options)
         {
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<DetalleFactura>()
+                .HasOne(e => e.CabFactura)
+                .WithMany(e => e.Detalles)
+                .HasForeignKey(e => e.FacturaId)
+                .IsRequired();
         }
     }
 }
