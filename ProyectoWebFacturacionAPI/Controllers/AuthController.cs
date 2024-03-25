@@ -5,6 +5,7 @@ using ProyectoWebFacturacionAPI.Data;
 using ProyectoWebFacturacionAPI.DTO;
 using ProyectoWebFacturacionAPI.Services;
 using ProyectoWebFacturacionAPI.Utils;
+using ProyectoWebFacturacionAPI.Utils.Responses;
 using System.Security.Claims;
 
 namespace ProyectoWebFacturacionAPI.Controllers
@@ -51,7 +52,11 @@ namespace ProyectoWebFacturacionAPI.Controllers
                 }
                 else
                 {
-                    return Unauthorized();
+                    return BadRequest(new ResponseResource<string>
+                    {
+                        Msg = "Ha excedido el número máximo de intentos",
+                        Data = null
+                    });
                 }
             }
 
@@ -67,7 +72,15 @@ namespace ProyectoWebFacturacionAPI.Controllers
             
             var token = TokenUtils.GenerateToken(usuario, _configuration["Jwt:SecretKey"] ?? "");
 
-            return Ok(token);
+            var response = new ResponseResource<AuthDTO>
+            {
+                Msg = "Logueado con éxito",
+                Data = new AuthDTO { 
+                    token = token
+                }
+            };
+
+            return Ok(response);
         }
 
         [Authorize]

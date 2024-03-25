@@ -2,6 +2,7 @@
 using ProyectoWebFacturacionAPI.DTO;
 using ProyectoWebFacturacionAPI.Models;
 using ProyectoWebFacturacionAPI.Services;
+using ProyectoWebFacturacionAPI.Utils.Responses;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -20,20 +21,26 @@ namespace ProyectoWebFacturacionAPI.Controllers
 
         // GET: api/productos
         [HttpGet]
-        public async Task<ActionResult<Producto>> ObtenerProductos()
+        public async Task<ActionResult<ResponseResource<ICollection<Producto>>>> ObtenerProductos()
         {
             var productos = await _productoService.ObtenerProductos();
 
-            return Ok(productos);
+            return Ok(new ResponseResource<ICollection<Producto>> { 
+                Msg = "Obtenido con éxito",
+                Data = productos
+            });
         }
 
         // GET api/productos/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Producto>> ObtenerProducto(int id)
+        public async Task<ActionResult<ResponseResource<Producto>>> ObtenerProducto(int id)
         {
             var producto = await _productoService.ObtenerProductoPorId(id);
 
-            return Ok(producto);
+            return Ok(new ResponseResource<Producto> {
+                Msg = "Obtenido con éxito",
+                Data = producto
+            });
         }
 
         // POST api/productos

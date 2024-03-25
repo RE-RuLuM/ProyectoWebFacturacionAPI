@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using ProyectoWebFacturacionAPI.DTO;
 using ProyectoWebFacturacionAPI.Models;
 using ProyectoWebFacturacionAPI.Services;
+using ProyectoWebFacturacionAPI.Utils.QueryParams;
+using ProyectoWebFacturacionAPI.Utils.Responses;
 
 namespace ProyectoWebFacturacionAPI.Controllers
 {
@@ -20,17 +22,24 @@ namespace ProyectoWebFacturacionAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Cliente>>> ListarClientes()
+        public async Task<ActionResult<List<Cliente>>> ListarClientes([FromQuery] ClienteQueryParams query)
         {
-            var clientes = await _clienteService.ObtenerClientes();
-            return Ok(clientes);
+            var clientes = await _clienteService.ObtenerClientes(query);
+            return Ok(new ResponseResource<ICollection<Cliente>> { 
+                Msg = "Obtenido con éxito",
+                Data = clientes
+            });
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Cliente>> ObtenerCliente(int id)
         {
             var cliente = await _clienteService.ObtenerClientePorId(id);
-            return Ok(cliente);
+            return Ok(new ResponseResource<Cliente>
+            {
+                Msg = "Obtenido con éxito",
+                Data = cliente
+            });
         }
 
         [HttpPost]

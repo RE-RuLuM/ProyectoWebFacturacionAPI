@@ -6,8 +6,9 @@ namespace ProyectoWebFacturacionAPI.Services
 {
     public interface IFacturaService
     {
-        public Task<ResponseResource<CabFactura>> EmitirFactura(FacturaDTO facturaDTO);
+        public Task<CabFactura> EmitirFactura(FacturaDTO facturaDTO);
         public Task<ICollection<CabFactura>> ListarFacturas();
+        public Task<CabFactura> ObtenerFacturaPorId(int id);
         public Task<int> EliminarFactura(int id);
     }
 }

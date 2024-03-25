@@ -29,7 +29,7 @@ namespace ProyectoWebFacturacionAPI.ServicesImpl
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<ResponseResource<CabFactura>> EmitirFactura(FacturaDTO facturaDTO)
+        public async Task<CabFactura> EmitirFactura(FacturaDTO facturaDTO)
         {
             using var transaction = _context.Database.BeginTransaction();
             try
@@ -71,8 +71,6 @@ namespace ProyectoWebFacturacionAPI.ServicesImpl
 
                 _context.CabFacturas.Add(factura);
 
-                Console.WriteLine(factura.Id);
-
                 await _context.SaveChangesAsync();
 
                 var secuencial = factura.Id.ToString().PadLeft(8, '0');
@@ -83,19 +81,12 @@ namespace ProyectoWebFacturacionAPI.ServicesImpl
 
                 await transaction.CommitAsync();
 
-                return new ResponseResource<CabFactura>
-                {
-                    Msg = $"Factura {factura.NumeroFactura} emitida",
-                    Data = factura
-                };
+                return factura;
             }
             catch (Exception e)
             {
                 await transaction.RollbackAsync();
-                return new ResponseResource<CabFactura>
-                {
-                    Msg = e.Message
-                };
+                return null;
             }
             
         }
@@ -104,8 +95,15 @@ namespace ProyectoWebFacturacionAPI.ServicesImpl
         {
             return await _context.CabFacturas
                 .Where(f => f.Activo)
+                .Include(f => f.Cliente)
                 .Include(f => f.Detalles)
                 .ToListAsync();
         }
+
+        public Task<CabFactura?> ObtenerFacturaPorId(int id) =>
+            _context.CabFacturas
+                .Include(f => f.Cliente)
+                .Include(f => f.Detalles)
+                .FirstOrDefaultAsync(f => f.Id == id);
     }
 }

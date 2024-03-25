@@ -3,6 +3,7 @@ using ProyectoWebFacturacionAPI.Data;
 using ProyectoWebFacturacionAPI.DTO;
 using ProyectoWebFacturacionAPI.Models;
 using ProyectoWebFacturacionAPI.Services;
+using ProyectoWebFacturacionAPI.Utils.QueryParams;
 
 namespace ProyectoWebFacturacionAPI.ServicesImpl
 {
@@ -19,7 +20,6 @@ namespace ProyectoWebFacturacionAPI.ServicesImpl
 
             cliente.RucDni = clienteReq.RucDni;
             cliente.Nombres = clienteReq.Nombres;
-            cliente.Apellidos = clienteReq.Apellidos;
             cliente.Direccion = clienteReq.Direccion;
             cliente.Correo = clienteReq.Correo;
 
@@ -32,7 +32,6 @@ namespace ProyectoWebFacturacionAPI.ServicesImpl
             {
                 RucDni = clienteReq.RucDni,
                 Nombres = clienteReq.Nombres,
-                Apellidos = clienteReq.Apellidos,
                 Correo = clienteReq.Correo,
                 Direccion = clienteReq.Direccion,
                 Activo = true,
@@ -54,8 +53,23 @@ namespace ProyectoWebFacturacionAPI.ServicesImpl
             return await _context.SaveChangesAsync();
         }
 
-        public Task<Cliente> ObtenerClientePorId(int id) => _context.Clientes.SingleAsync(c => c.Id == id);
+        public Task<Cliente> ObtenerClientePorId(int id) => 
+            _context.Clientes.SingleAsync(c => c.Id == id);
 
-        public async Task<ICollection<Cliente>> ObtenerClientes() => await _context.Clientes.Where(c => c.Activo).ToListAsync();
+        public async Task<ICollection<Cliente>> ObtenerClientes(ClienteQueryParams query)
+        {
+            var queryDB = _context.Clientes.Where(c => c.Activo);
+
+            if (query.Nombres is not null)
+                queryDB = queryDB.Where(c => c.Nombres.ToUpper().Contains(query.Nombres.ToUpper()));
+
+            if (query.RucDni is not null)
+                queryDB = queryDB.Where(c => c.RucDni.ToUpper().Equals(query.RucDni));
+
+            if (query.Correo is not null)
+                queryDB = queryDB.Where(c => c.Correo.ToUpper().Contains(query.Correo.ToUpper()));
+
+            return await queryDB.ToListAsync();
+        }
     }
 }

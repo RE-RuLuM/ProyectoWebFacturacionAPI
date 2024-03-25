@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProyectoWebFacturacionAPI.DTO;
+using ProyectoWebFacturacionAPI.Models;
 using ProyectoWebFacturacionAPI.Services;
+using ProyectoWebFacturacionAPI.Utils.Responses;
 
 namespace ProyectoWebFacturacionAPI.Controllers
 {
@@ -22,22 +24,45 @@ namespace ProyectoWebFacturacionAPI.Controllers
         {
             var facturas = await _facturaService.ListarFacturas();
 
-            return Ok(facturas);
+            return Ok(new ResponseResource<ICollection<CabFactura>>
+            {
+                Msg = "Obtenido con éxito",
+                Data = facturas
+            });
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult> ObtenerFacturaPorId(int id)
+        {
+            var factura = await _facturaService.ObtenerFacturaPorId(id);
+
+            return Ok(new ResponseResource<CabFactura>
+            {
+                Msg = "Obtenido con éxito",
+                Data = factura
+            });
         }
 
         [HttpPost]
         public async Task<ActionResult> EmitirFactura(FacturaDTO facturaDTO)
         {
             facturaDTO.UsuarioCreacion = User?.Identity?.Name;
-            var response = await _facturaService.EmitirFactura(facturaDTO);
+            var factura = await _facturaService.EmitirFactura(facturaDTO);
 
-            return Created(Url.Action(nameof(EmitirFactura)), response);
+            if (factura is null)
+                return Problem();
+
+            return Created(Url.Action(nameof(EmitirFactura)), new ResponseResource<CabFactura>
+            {
+                Msg = $"Factura {factura.NumeroFactura} emitida",
+                Data = factura
+            });
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> EliminarFactura(int id)
         {
-            var resultado = await _facturaService.EliminarFactura(id);
+            await _facturaService.EliminarFactura(id);
 
             return Ok();
         }

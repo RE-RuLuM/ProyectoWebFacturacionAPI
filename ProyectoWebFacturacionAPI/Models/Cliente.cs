@@ -12,8 +12,6 @@ namespace ProyectoWebFacturacionAPI.Models
         [Required]
         public required string Nombres { get; set; }
         [Required]
-        public required string Apellidos { get; set; }
-        [Required]
         public required string Direccion { get; set; }
         [Required]
         public required string Correo { get; set; }
